@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Title</title>
+</head>
+<body>
+<form action="" id="myform" name="myform" method="post" data-userId="{{userId}}">
+    Name:<br />
+    <input type="text" name="name" value="{{formName}}" /><br />
+    E-mail:<br />
+    <input type="text" name="mail" value="{{formMail}}" /><br />
+    Comment:<br />
+    <input type="text" name="comment" value="{{formComment}}" size="50" />
+    <br /><br />
+    <input type="submit" value="Send">
+    <input type="reset" value="Reset">
+</form>
+
+<script type="application/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="application/javascript" src="sisyphus.min.js"></script>
+<script type="application/javascript">
+
+    var hashValue = window.location.hash;
+
+
+
+
+    $('form').sisyphus({
+        timeout: 30,
+        onSave: function() {
+            var $textList = $('input[type=text]');
+            var data = "";
+            for(var i=0, text ; text=$textList[i]; i++){
+                data += text.value;
+                console.log(text.value);
+            }
+            console.log('Data is now saved to Local Storage');
+            $.ajax("http://local.coupangdev.com:8080/autosave?data="+data);
+        },
+        excludeFields: [],
+        customKeySuffix: hashValue,
+        locationBased: true,
+        autoRelease: true,
+        onBeforeRestore: function() {
+
+            if({{loadData}}){
+                console.log("onBeforeRestore load false");
+                return false;
+            }
+            console.log("onBeforeRestore load true");
+
+        },
+        onRestore: function() {console.log("onRestore")},
+        onRelease: function() {console.log("onRelease")}
+    });
+</script>
+</body>
+</html>
